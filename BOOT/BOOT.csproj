@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -13,13 +13,52 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
 
-    <IlcSystemModule>efinoruntime</IlcSystemModule>
+    <IlcSystemModule>BOOT</IlcSystemModule>
     <EntryPointSymbol>EfiMain</EntryPointSymbol>
     <LinkerSubsystem>EFI_APPLICATION</LinkerSubsystem>
 
     <PublishAot>true</PublishAot>
   </PropertyGroup>
 
+  <Target Name="CopyEFI" AfterTargets="Publish">
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\$(NativeOutputPath)$(TargetName)$(NativeBinaryExt)" DestinationFiles="$(MSBuildProjectDirectory)\..\ROOT\EFI\BOOT\BOOTX64.efi"></Copy>
+  </Target>
+
+  <Target Name="CreateVHD" AfterTargets="CopyEFI">
+    <PropertyGroup>
+      <VHDFilePath>$(MSBuildProjectDirectory)\$(NativeOutputPath)$(TargetName).vhd</VHDFilePath>
+      <AttachVHDLines>
+        create vdisk file="$(VHDFilePath)" maximum=500
+        select vdisk file="$(VHDFilePath)"
+        attach vdisk
+        convert gpt
+        create partition efi size=100
+        format quick fs=fat32 label="System"
+        assign letter=X
+      </AttachVHDLines>
+      <DetachVHDLines>
+        select vdisk file="$(VHDFilePath)"
+        select partition 2
+        remove letter=X
+        detach vdisk
+      </DetachVHDLines>
+    </PropertyGroup>
+    <Delete Files="$(VHDFilePath)" />
+    <WriteLinesToFile File="$(IntermediateOutputPath)attachvhd.txt" Overwrite="true" Lines="$(AttachVHDLines)" />
+    <Exec Command="diskpart /s &quot;$(IntermediateOutputPath)attachvhd.txt&quot;" />
+    <Exec Command="xcopy.exe  &quot;$(MSBuildProjectDirectory)\..\ROOT\&quot; &quot;X:\&quot; /e" />
+    <WriteLinesToFile File="$(IntermediateOutputPath)detachvhd.txt" Overwrite="true" Lines="$(DetachVHDLines)" />
+    <Exec Command="diskpart /s &quot;$(IntermediateOutputPath)detachvhd.txt&quot;" />
+    <Message Text="Created VHDX at $(VHDFilePath)." Importance="High" />
+  </Target>
+  
+  <Target Name="RunVMware" AfterTargets="CreateVHD">
+    <Error Text="Please install VMware Player in order to run RaisingOS!" Condition="!Exists('C:\Program Files (x86)\VMware\VMware Player\vmplayer.exe')And!Exists('C:\Program Files (x86)\VMware\VMware Workstation\vmplayer.exe')"></Error>
+
+    <Exec Condition="Exists('C:\Program Files (x86)\VMware\VMware Workstation\vmplayer.exe')" Command="&quot;C:\Program Files (x86)\VMware\VMware Workstation\vmplayer.exe&quot; &quot;$(MSBuildProjectDirectory)\..\RaisingOS.vmx"></Exec>
+    <Exec Condition="Exists('C:\Program Files (x86)\VMware\VMware Player\vmplayer.exe')And!Exists('C:\Program Files (x86)\VMware\VMware Workstation\vmplayer.exe')" Command="&quot;C:\Program Files (x86)\VMware\VMware Player\vmplayer.exe&quot; &quot;$(MSBuildProjectDirectory)\..\RaisingOS.vmx"></Exec>
+  </Target>
+  
   <!-- The project file pretends this is .NET, but it's not .NET. Remove all assembly references the .NET SDK added. -->
   <Target Name="CustomizeReferences" BeforeTargets="BeforeCompile" AfterTargets="FindReferenceAssembliesForReferences">
     <ItemGroup>

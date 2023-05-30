@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<Foundry>
+<VM>
+<VMId type="string">52 47 6c a6 99 40 84 01-73 85 51 fd 9a 1b 1d 50</VMId>
+<ClientMetaData>
+<clientMetaDataAttributes/>
+<HistoryEventList/></ClientMetaData>
+<vmxPathName type="string">RaisingOS.vmx</vmxPathName></VM></Foundry>

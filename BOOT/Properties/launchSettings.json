@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "VMware": {
+      "commandName": "Executable",
+      "executablePath": "dotnet",
+      "commandLineArgs": "publish -r win-x64 -c Debug BOOT -p:EmitLegacyAssetsFileItems=true",
+      "workingDirectory": "../"
+    }
+  }
+}
