@@ -139,6 +139,9 @@ namespace Internal.Runtime.CompilerHelpers
 
     [RuntimeExport("RhpFallbackFailFast")]
     static void RhpFallbackFailFast() { while (true) ; }
+
+    [RuntimeExport("__security_cookie")]
+    static void __security_cookie() { }
   }
 }
 #endregion
