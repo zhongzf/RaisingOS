@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Runtime;
 using Uefi;
 
 unsafe class Program
 {
   static void Main() { }
 
-  [System.Runtime.RuntimeExport("EfiMain")]
+  [RuntimeExport("EfiMain")]
   static EFI_STATUS EfiMain(EFI_HANDLE imageHandle, EFI_SYSTEM_TABLE* systemTable)
   {
     string hello = "Hello World!";
