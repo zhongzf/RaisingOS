@@ -396,5 +396,6 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
-RaisingOS-*.scoreboard
+*.scoreboard
 ROOT/EFI/BOOT/BOOTX64.efi
+RaisingOS.nvram
