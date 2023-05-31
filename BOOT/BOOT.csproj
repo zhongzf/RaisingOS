@@ -73,5 +73,6 @@
       <RuntimeHostConfigurationOption Remove="@(RuntimeHostConfigurationOption)" />
     </ItemGroup>
   </Target>
+  <Import Project="..\Uefi\Uefi.projitems" Label="Shared" />
   
 </Project>

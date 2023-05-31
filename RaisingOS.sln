@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33717.318
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BOOT", "BOOT\BOOT.csproj", "{09FB9752-8EA5-4641-8CFF-E3AB8D500E4A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BOOT", "BOOT\BOOT.csproj", "{09FB9752-8EA5-4641-8CFF-E3AB8D500E4A}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Uefi", "Uefi\Uefi.shproj", "{975A0510-4ED5-46F6-B8CE-E1B56ACB60EA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,5 +23,9 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7D46841E-E39C-458E-BFD7-B4E8C1AEE53B}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Uefi\Uefi.projitems*{09fb9752-8ea5-4641-8cff-e3ab8d500e4a}*SharedItemsImports = 5
+		Uefi\Uefi.projitems*{975a0510-4ed5-46f6-b8ce-e1b56acb60ea}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal

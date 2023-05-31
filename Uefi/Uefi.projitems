@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>975a0510-4ed5-46f6-b8ce-e1b56acb60ea</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Uefi</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Base.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Protocol\SimpleTextIn.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Protocol\SimpleTextOut.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UefiBaseType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UefiMultiPhase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UefiSpec.cs" />
+  </ItemGroup>
+</Project>
