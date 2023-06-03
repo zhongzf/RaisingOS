@@ -99,6 +99,16 @@ namespace System.Runtime.InteropServices
     Unicode = 3,    // Strings should be marshalled as Unicode 2 byte chars.
     Auto = 4,       // Marshal Strings in the right way for the target system.
   }
+
+  public sealed class FieldOffsetAttribute : Attribute
+  {
+    public FieldOffsetAttribute(int offset)
+    {
+      Value = offset;
+    }
+
+    public int Value { get; }
+  }
 }
 #endregion
 

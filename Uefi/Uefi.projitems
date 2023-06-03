@@ -3,17 +3,57 @@
   <PropertyGroup>
     <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
     <HasSharedItems>true</HasSharedItems>
-    <SharedGUID>975a0510-4ed5-46f6-b8ce-e1b56acb60ea</SharedGUID>
+    <SharedGUID>f2386177-3317-4509-870c-9a4889f157e7</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
     <Import_RootNamespace>Uefi</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)Base.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Protocol\SimpleTextIn.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Protocol\SimpleTextOut.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)UefiBaseType.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)UefiMultiPhase.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)UefiSpec.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\Base.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\ConfidentialComputingGuestAttr.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\IndustryStandard\Acpi.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\IndustryStandard\Acpi10.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\IndustryStandard\Acpi20.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\IndustryStandard\AlertStandardFormatTable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\IndustryStandard\ArmErrorSourceTable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\IndustryStandard\ArmPerformanceMonitoringUnitTable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\IndustryStandard\Atapi.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\IndustryStandard\Bluetooth.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\IndustryStandard\Bmp.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\IndustryStandard\Cxl.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\IndustryStandard\DebugPort2Table.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\IndustryStandard\DebugPortTable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\IndustryStandard\Dhcp.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\IndustryStandard\DmaRemappingReportingTable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\IndustryStandard\Emmc.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\IndustryStandard\HighPrecisionEventTimerTable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\IndustryStandard\Hsti.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\IndustryStandard\Http11.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\IndustryStandard\IoRemappingTable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\IndustryStandard\Ipmi.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\PiDxe.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\PiMm.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\PiPei.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\PiSmm.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\Protocol\AbsolutePointer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\Protocol\AcpiSystemDescriptionTable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\Protocol\AcpiTable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\Protocol\AdapterInformation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\Protocol\Arp.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\Protocol\AtaPassThru.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\Protocol\AuthenticationInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\Protocol\Bds.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\Protocol\Bis.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\Protocol\BlockIo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\Protocol\BlockIo2.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\Protocol\DevicePath.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\Protocol\SimpleTextIn.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\Protocol\SimpleTextOut.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\Uefi.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\Uefi\UefiAcpiDataTable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\Uefi\UefiBaseType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\Uefi\UefiGpt.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\Uefi\UefiMultiPhase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MdePkg\Uefi\UefiSpec.cs" />
   </ItemGroup>
 </Project>

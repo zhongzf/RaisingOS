@@ -9,7 +9,7 @@ unsafe class Program
   [RuntimeExport("EfiMain")]
   static EFI_STATUS EfiMain(EFI_HANDLE imageHandle, EFI_SYSTEM_TABLE* systemTable)
   {
-    string hello = "Hello World!";
+    string hello = "Hello World with edk2-cs!";
     fixed (char* pHello = hello)
     {
       systemTable->ConOut->OutputString(systemTable->ConOut, pHello);
