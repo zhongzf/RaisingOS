@@ -78,6 +78,10 @@ unsafe class Program
 
   public static bool StringCompare(string s1, char* s2)
   {
+    if (s2[s1.Length] != '\0')
+    {
+      return false;
+    }
     fixed (char* p1 = s1)
     {
       for (int i = 0; i < s1.Length; i++)
@@ -90,6 +94,11 @@ unsafe class Program
     }
     return true;
   }
+
+  public static void DrawPixel(uint x, uint y, EFI_GRAPHICS_OUTPUT_BLT_PIXEL color)
+  {
+  }
+
 
   public static void Shell()
   {
