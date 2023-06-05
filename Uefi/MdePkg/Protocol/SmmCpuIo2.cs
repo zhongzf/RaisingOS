@@ -29,10 +29,10 @@ public unsafe partial class EFI
   ///
   /// Width of the SMM CPU I/O operations
   ///
-  //public const ulong SMM_IO_UINT8 = MM_IO_UINT8;
-  //public const ulong SMM_IO_UINT16 = MM_IO_UINT16;
-  //public const ulong SMM_IO_UINT32 = MM_IO_UINT32;
-  //public const ulong SMM_IO_UINT64 = MM_IO_UINT64;
+  public const ulong SMM_IO_UINT8 = MM_IO_UINT8;
+  public const ulong SMM_IO_UINT16 = MM_IO_UINT16;
+  public const ulong SMM_IO_UINT32 = MM_IO_UINT32;
+  public const ulong SMM_IO_UINT64 = MM_IO_UINT64;
 }
 
 [StructLayout(LayoutKind.Sequential)]

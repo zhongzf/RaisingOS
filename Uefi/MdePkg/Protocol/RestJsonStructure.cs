@@ -64,7 +64,7 @@ public unsafe struct EFI_REST_JSON_RESOURCE_TYPE_IDENTIFIER
 [StructLayout(LayoutKind.Sequential)]
 public unsafe struct EFI_REST_JSON_STRUCTURE_SUPPORTED
 {
-  public LIST_ENTRY NextSupportedRsrcInterp; ///< Linklist to next supported conversion.
+  //public LIST_ENTRY NextSupportedRsrcInterp; ///< Linklist to next supported conversion.
   public EFI_REST_JSON_RESOURCE_TYPE_IDENTIFIER RestResourceInterp;      ///< JSON resource type this convertor supports.
 }
 
@@ -168,7 +168,7 @@ public unsafe struct EFI_REST_JSON_STRUCTURE_HEADER
 [StructLayout(LayoutKind.Sequential)]
 public unsafe struct EFI_REST_JSON_STRUCTURE_PROTOCOL
 {
-  public readonly delegate* unmanaged</* IN */EFI_REST_JSON_STRUCTURE_PROTOCOL* /*This*/,/* IN */EFI_REST_JSON_STRUCTURE_SUPPORTED* /*JsonStructureSupported*/,/* IN */EFI_REST_JSON_STRUCTURE_TO_STRUCTURE /*ToStructure*/,/* IN */EFI_REST_JSON_STRUCTURE_TO_JSON /*ToJson*/,/* IN */EFI_REST_JSON_STRUCTURE_DESTORY_STRUCTURE /*DestroyStructure*/, EFI_STATUS> /*EFI_REST_JSON_STRUCTURE_REGISTER*/ Register;
+  //public readonly delegate* unmanaged</* IN */EFI_REST_JSON_STRUCTURE_PROTOCOL* /*This*/,/* IN */EFI_REST_JSON_STRUCTURE_SUPPORTED* /*JsonStructureSupported*/,/* IN */EFI_REST_JSON_STRUCTURE_TO_STRUCTURE /*ToStructure*/,/* IN */EFI_REST_JSON_STRUCTURE_TO_JSON /*ToJson*/,/* IN */EFI_REST_JSON_STRUCTURE_DESTORY_STRUCTURE /*DestroyStructure*/, EFI_STATUS> /*EFI_REST_JSON_STRUCTURE_REGISTER*/ Register;
   public readonly delegate* unmanaged</* IN */EFI_REST_JSON_STRUCTURE_PROTOCOL* /*This*/,/* IN */EFI_REST_JSON_RESOURCE_TYPE_IDENTIFIER* /*JsonRsrcIdentifier*/,/* IN */byte* /*ResourceJsonText*/,/* OUT */EFI_REST_JSON_STRUCTURE_HEADER** /*JsonStructure*/, EFI_STATUS> /*EFI_REST_JSON_STRUCTURE_TO_STRUCTURE*/ ToStructure;
   public readonly delegate* unmanaged</* IN */EFI_REST_JSON_STRUCTURE_PROTOCOL* /*This*/,/* IN */EFI_REST_JSON_STRUCTURE_HEADER* /*JsonStructureHeader*/,/* OUT */byte** /*ResourceJsonText*/, EFI_STATUS> /*EFI_REST_JSON_STRUCTURE_TO_JSON*/ ToJson;
   public readonly delegate* unmanaged</* IN */EFI_REST_JSON_STRUCTURE_PROTOCOL* /*This*/,/* IN */EFI_REST_JSON_STRUCTURE_HEADER* /*JsonStructureHeader*/, EFI_STATUS> /*EFI_REST_JSON_STRUCTURE_DESTORY_STRUCTURE*/ DestoryStructure;

@@ -25,17 +25,17 @@ public unsafe partial class EFI
       0xd40b6b80, 0x97d5, 0x4282, new byte[] { 0xbb, 0x1d, 0x22, 0x3a, 0x16, 0x91, 0x80, 0x58 });
 
   // typedef struct _EFI_NVDIMM_LABEL_PROTOCOL EFI_NVDIMM_LABEL_PROTOCOL;
-}
-
 public const ulong EFI_NVDIMM_LABEL_INDEX_SIG_LEN = 16;
 public const ulong EFI_NVDIMM_LABEL_INDEX_ALIGN = 256;
+}
+
 [StructLayout(LayoutKind.Sequential)]
 public unsafe struct EFI_NVDIMM_LABEL_INDEX_BLOCK
 {
   ///
   /// Signature of the Index Block data structure. Must be "NAMESPACE_INDEX\0".
   ///
-  public fixed byte Sig[EFI_NVDIMM_LABEL_INDEX_SIG_LEN];
+  public byte[/*EFI_NVDIMM_LABEL_INDEX_SIG_LEN*/] Sig;
 
   ///
   /// Attributes of this Label Storage Area.
@@ -142,7 +142,7 @@ public unsafe struct EFI_NVDIMM_LABEL
   ///
   /// NULL-terminated string using UTF-8 character formatting.
   ///
-  public fixed byte Name[EFI_NVDIMM_LABEL_NAME_LEN];
+  public byte[/*EFI_NVDIMM_LABEL_NAME_LEN*/] Name;
 
   ///
   /// Attributes of this namespace.
@@ -259,7 +259,7 @@ public unsafe struct EFI_NVDIMM_LABEL_SET_COOKIE_INFO
   ///
   /// Array size is 1 if EFI_NVDIMM_LABEL_FLAGS_LOCAL is set indicating a Local Namespaces.
   ///
-  public fixed EFI_NVDIMM_LABEL_SET_COOKIE_MAP Mapping[0];
+  public EFI_NVDIMM_LABEL_SET_COOKIE_MAP[] Mapping;
 }
 
 // /**

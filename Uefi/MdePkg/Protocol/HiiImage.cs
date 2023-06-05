@@ -44,6 +44,8 @@ public unsafe partial class EFI
   @param Bitmap A pointer to the actual bitmap, organized left-to-right,
                 top-to-bottom. The size of the bitmap is
                 Width*Height*sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL).
+
+
 **/
 [StructLayout(LayoutKind.Sequential)]
 public unsafe struct EFI_IMAGE_INPUT
@@ -191,19 +193,19 @@ public unsafe partial class EFI
   @param Screen Points to the EFI_GRAPHICS_OUTPUT_PROTOCOL which
                 describes the screen on which to draw the
                 specified image.
+}
 
 **/
-//  [StructLayout(LayoutKind.Sequential)]
-//  public unsafe struct Image
-//  {
-//    public ushort Width;
-//    public ushort Height;
-//    union {
-//  public EFI_GRAPHICS_OUTPUT_BLT_PIXEL* Bitmap;
-//    public EFI_GRAPHICS_OUTPUT_PROTOCOL* Screen;
-//  }
-//}
-//EFI_IMAGE_OUTPUT;
+[StructLayout(LayoutKind.Sequential)]
+public unsafe struct EFI_IMAGE_OUTPUT
+{
+  public ushort Width;
+  public ushort Height;
+  //  union {
+  //public EFI_GRAPHICS_OUTPUT_BLT_PIXEL* Bitmap;
+  //  public EFI_GRAPHICS_OUTPUT_PROTOCOL* Screen;
+  //}
+}
 
 // /**
 // 

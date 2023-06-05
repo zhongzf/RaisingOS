@@ -73,18 +73,18 @@ public unsafe struct EFI_DHCP4_HEADER
 // #pragma pack()
 
 // #pragma pack(1)
-//[StructLayout(LayoutKind.Sequential)]
-//public unsafe struct Dhcp4
-//{
-//  ///
-//  /// Size of the EFI_DHCP4_PACKET buffer.
-//  ///
-//  public uint Size;
-//  ///
-//  /// Length of the EFI_DHCP4_PACKET from the first byte of the Header field
-//  /// to the last byte of the Option[] field.
-//  ///
-//  public uint Length;
+[StructLayout(LayoutKind.Sequential)]
+public unsafe struct EFI_DHCP4_PACKET
+{
+  ///
+  /// Size of the EFI_DHCP4_PACKET buffer.
+  ///
+  public uint Size;
+  ///
+  /// Length of the EFI_DHCP4_PACKET from the first byte of the Header field
+  /// to the last byte of the Option[] field.
+  ///
+  public uint Length;
 
 //  struct {
 //    ///
@@ -100,7 +100,7 @@ public unsafe struct EFI_DHCP4_HEADER
 //  ///
 //  public fixed byte Option[1];
 //}
-//} EFI_DHCP4_PACKET;
+} 
 // #pragma pack()
 
 public enum EFI_DHCP4_STATE

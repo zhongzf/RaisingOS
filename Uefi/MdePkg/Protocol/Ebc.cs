@@ -302,7 +302,7 @@ public unsafe struct EFI_EBC_PROTOCOL
 {
   public readonly delegate* unmanaged</* IN */EFI_EBC_PROTOCOL* /*This*/,/* IN */EFI_HANDLE /*ImageHandle*/,/* IN */void* /*EbcEntryPoint*/,/* OUT */void** /*Thunk*/, EFI_STATUS> /*EFI_EBC_CREATE_THUNK*/ CreateThunk;
   public readonly delegate* unmanaged</* IN */EFI_EBC_PROTOCOL* /*This*/,/* IN */EFI_HANDLE /*ImageHandle*/, EFI_STATUS> /*EFI_EBC_UNLOAD_IMAGE*/ UnloadImage;
-  public readonly delegate* unmanaged</* IN */EFI_EBC_PROTOCOL* /*This*/,/* IN */EBC_ICACHE_FLUSH /*Flush*/, EFI_STATUS> /*EFI_EBC_REGISTER_ICACHE_FLUSH*/ RegisterICacheFlush;
+  //public readonly delegate* unmanaged</* IN */EFI_EBC_PROTOCOL* /*This*/,/* IN */EBC_ICACHE_FLUSH /*Flush*/, EFI_STATUS> /*EFI_EBC_REGISTER_ICACHE_FLUSH*/ RegisterICacheFlush;
   public readonly delegate* unmanaged</* IN */EFI_EBC_PROTOCOL* /*This*/,/* IN OUT */ulong* /*Version*/, EFI_STATUS> /*EFI_EBC_GET_VERSION*/ GetVersion;
 }
 

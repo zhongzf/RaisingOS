@@ -101,16 +101,16 @@ public unsafe struct NII_entry
   public uint NumberOfInterfaces;  ///< The number of NIC devices
                                    ///< that this UNDI controls.
   public uint reserved;
-  public UNDI_CONFIG_TABLE* nextlink;           ///< A pointer to the next UNDI
+  //public UNDI_CONFIG_TABLE* nextlink;           ///< A pointer to the next UNDI
                                                 ///< configuration table.
                                                 ///
                                                 /// The length of this array is given in the NumberOfInterfaces field.
                                                 ///
-  //  struct {
-  //    public void* NII_InterfacePointer;          ///< Pointer to the NII interface structure.
-  //  public void* DevicePathPointer;             ///< Pointer to the device path for this NIC.
-  //}
-};
+//  struct {
+//    public void* NII_InterfacePointer;          ///< Pointer to the NII interface structure.
+//  public void* DevicePathPointer;             ///< Pointer to the device path for this NIC.
+//}
+}
 
 // extern EFI_GUID  gEfiNetworkInterfaceIdentifierProtocolGuid;
 // extern EFI_GUID  gEfiNetworkInterfaceIdentifierProtocolGuid_31;

@@ -352,7 +352,7 @@ public unsafe struct EFI_IPSEC_SPD_DATA
   /// A null-terminated ASCII name string which is used as a symbolic
   /// identifier for an IPsec Local or Remote address.
   ///
-  public fixed byte Name[MAX_PEERID_LEN];
+  public  byte[/*MAX_PEERID_LEN*/] Name;
   ///
   /// Bit-mapped list describing Populate from Packet flags. When
   /// creating a SA, if PackageFlag bit is set to TRUE, instantiate
@@ -390,7 +390,7 @@ public unsafe struct EFI_IPSEC_SPD_DATA
   /// The SAD entry used for the traffic processing. The
   /// existed SAD entry links indicate this is the manual key case.
   ///
-  public fixed EFI_IPSEC_SA_ID SaId[1];
+  public EFI_IPSEC_SA_ID[/*1*/] SaId;
 }
 
 ///
@@ -538,13 +538,13 @@ public unsafe struct EFI_IPSEC_SA_DATA2
 /// specifies the identifier for PAD entry, which is also used for SPD lookup.
 /// IpAddress Pointer to the IPv4 or IPv6 address range.
 ///
-//[StructLayout(LayoutKind.Sequential)]
-//public unsafe struct Id
-//{
-//  ///
-//  /// Flag to identify which type of PAD Id is used.
-//  ///
-//  public bool PeerIdValid;
+[StructLayout(LayoutKind.Sequential)]
+public unsafe struct EFI_IPSEC_PAD_ID
+{
+  ///
+  /// Flag to identify which type of PAD Id is used.
+  ///
+  public bool PeerIdValid;
 //  union {
 //    ///
 //    /// Pointer to the IPv4 or IPv6 address range.
@@ -558,7 +558,7 @@ public unsafe struct EFI_IPSEC_SA_DATA2
 //  ///
 //  public fixed byte PeerId[MAX_PEERID_LEN];
 //}
-//} EFI_IPSEC_PAD_ID;
+} 
 
 ///
 /// EFI_IPSEC_CONFIG_SELECTOR
@@ -570,7 +570,7 @@ public unsafe struct EFI_IPSEC_CONFIG_SELECTOR
 {
   [FieldOffset(0)] public EFI_IPSEC_SPD_SELECTOR SpdSelector;
   [FieldOffset(0)] public EFI_IPSEC_SA_ID SaId;
-  //[FieldOffset(0)] public EFI_IPSEC_PAD_ID PadId;
+  [FieldOffset(0)] public EFI_IPSEC_PAD_ID PadId;
 }
 
 ///

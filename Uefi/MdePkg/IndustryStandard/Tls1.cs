@@ -90,8 +90,8 @@ public enum TLS_CONTENT_TYPE
 public unsafe struct TLS_RECORD_HEADER
 {
   public byte ContentType;
-  public EFI_TLS_VERSION Version;
-  public ushort Length;
+  //public EFI_TLS_VERSION Version;
+  //public ushort Length;
 }
 
 public unsafe partial class EFI

@@ -33,15 +33,15 @@ public unsafe partial class EFI
 [StructLayout(LayoutKind.Sequential)]
 public unsafe struct PLDM_MESSAGE_HEADER
 {
-  public byte InstanceId = 5;          ///< Request instance ID.
-  public byte Reserved = 1;          ///< Reserved bit.
-  public byte DatagramBit = 1;          ///< used to indicate whether the Instance ID field is
-                                        ///< being used for tracking and matching requests and
-                                        ///< responses, or just being used for asynchronous
-                                        ///< notifications.
-  public byte RequestBit = 1;          ///< Request bit.
-  public byte PldmType = 6;          ///< PLDM message type.
-  public byte HeaderVersion = 2;          ///< Header version.
+  public byte InstanceId; // = 5;          ///< Request instance ID.
+  public byte Reserved; // = 1;          ///< Reserved bit.
+  public byte DatagramBit; // = 1;          ///< used to indicate whether the Instance ID field is
+  ///< being used for tracking and matching requests and
+  ///< responses, or just being used for asynchronous
+  ///< notifications.
+  public byte RequestBit; // = 1;          ///< Request bit.
+  public byte PldmType; // = 6;          ///< PLDM message type.
+  public byte HeaderVersion; // = 2;          ///< Header version.
   public byte PldmTypeCommandCode;        ///< The command code of PLDM message type.
 }
 
@@ -92,8 +92,8 @@ public unsafe partial class EFI
   public const ulong PLDM_TRANSFER_FLAG_MIDDLE = 0x02;
   public const ulong PLDM_TRANSFER_FLAG_END = 0x04;
   public const ulong PLDM_TRANSFER_FLAG_START_AND_END = 0x05;
-}
 
-public const ulong PLDM_TRANSFER_OPERATION_FLAG_GET_NEXT_PART = 0x00;
-public const ulong PLDM_TRANSFER_OPERATION_FLAG_GET_FIRST_PART = 0x01;
+  public const ulong PLDM_TRANSFER_OPERATION_FLAG_GET_NEXT_PART = 0x00;
+  public const ulong PLDM_TRANSFER_OPERATION_FLAG_GET_FIRST_PART = 0x01;
+}
 // #endif // PLDM_H_

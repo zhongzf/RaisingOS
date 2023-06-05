@@ -54,7 +54,7 @@ public unsafe struct EFI_TCP4_VARIABLE_DATA
 {
   public EFI_HANDLE DriverHandle;
   public uint ServiceCount;
-  //public fixed EFI_TCP4_SERVICE_POINT Services[1];
+  public EFI_TCP4_SERVICE_POINT[/*1*/] Services;
 }
 
 [StructLayout(LayoutKind.Sequential)]
@@ -186,7 +186,7 @@ public unsafe struct EFI_TCP4_RECEIVE_DATA
   public bool UrgentFlag;
   public uint DataLength;
   public uint FragmentCount;
-  //public fixed EFI_TCP4_FRAGMENT_DATA FragmentTable[1];
+  public EFI_TCP4_FRAGMENT_DATA[/*1*/] FragmentTable;
 }
 
 [StructLayout(LayoutKind.Sequential)]
@@ -196,40 +196,40 @@ public unsafe struct EFI_TCP4_TRANSMIT_DATA
   public bool Urgent;
   public uint DataLength;
   public uint FragmentCount;
-  //public fixed EFI_TCP4_FRAGMENT_DATA FragmentTable[1];
+  public EFI_TCP4_FRAGMENT_DATA[/*1*/] FragmentTable;
 }
 
-//[StructLayout(LayoutKind.Sequential)]
-//public unsafe struct Packet
-//{
-///
-/// When transmission finishes or meets any unexpected error it will
-/// be set to one of the following values:
-/// EFI_SUCCESS:              The receiving or transmission operation
-///                           completes successfully.
-/// EFI_CONNECTION_FIN:       The receiving operation fails because the communication peer
-///                           has closed the connection and there is no more data in the
-///                           receive buffer of the instance.
-/// EFI_CONNECTION_RESET:     The receiving or transmission operation fails
-///                           because this connection is reset either by instance
-///                           itself or the communication peer.
-/// EFI_ABORTED:              The receiving or transmission is aborted.
-/// EFI_TIMEOUT:              The transmission timer expires and no more
-///                           specific information is available.
-/// EFI_NETWORK_UNREACHABLE:  The transmission fails
-///                           because an ICMP network unreachable error is received.
-/// EFI_HOST_UNREACHABLE:     The transmission fails because an
-///                           ICMP host unreachable error is received.
-/// EFI_PROTOCOL_UNREACHABLE: The transmission fails
-///                           because an ICMP protocol unreachable error is received.
-/// EFI_PORT_UNREACHABLE:     The transmission fails and an
-///                           ICMP port unreachable error is received.
-/// EFI_ICMP_ERROR:           The transmission fails and some other
-///                           ICMP error is received.
-/// EFI_DEVICE_ERROR:         An unexpected system or network error occurs.
-/// EFI_NO_MEDIA:             There was a media error.
-///
-//  public EFI_TCP4_COMPLETION_TOKEN CompletionToken;
+[StructLayout(LayoutKind.Sequential)]
+public unsafe struct EFI_TCP4_IO_TOKEN
+{
+  ///
+  /// When transmission finishes or meets any unexpected error it will
+  /// be set to one of the following values:
+  /// EFI_SUCCESS:              The receiving or transmission operation
+  ///                           completes successfully.
+  /// EFI_CONNECTION_FIN:       The receiving operation fails because the communication peer
+  ///                           has closed the connection and there is no more data in the
+  ///                           receive buffer of the instance.
+  /// EFI_CONNECTION_RESET:     The receiving or transmission operation fails
+  ///                           because this connection is reset either by instance
+  ///                           itself or the communication peer.
+  /// EFI_ABORTED:              The receiving or transmission is aborted.
+  /// EFI_TIMEOUT:              The transmission timer expires and no more
+  ///                           specific information is available.
+  /// EFI_NETWORK_UNREACHABLE:  The transmission fails
+  ///                           because an ICMP network unreachable error is received.
+  /// EFI_HOST_UNREACHABLE:     The transmission fails because an
+  ///                           ICMP host unreachable error is received.
+  /// EFI_PROTOCOL_UNREACHABLE: The transmission fails
+  ///                           because an ICMP protocol unreachable error is received.
+  /// EFI_PORT_UNREACHABLE:     The transmission fails and an
+  ///                           ICMP port unreachable error is received.
+  /// EFI_ICMP_ERROR:           The transmission fails and some other
+  ///                           ICMP error is received.
+  /// EFI_DEVICE_ERROR:         An unexpected system or network error occurs.
+  /// EFI_NO_MEDIA:             There was a media error.
+  ///
+  public EFI_TCP4_COMPLETION_TOKEN CompletionToken;
 //  union {
 //    ///
 //    /// When this token is used for receiving, RxData is a pointer to EFI_TCP4_RECEIVE_DATA.
@@ -240,7 +240,7 @@ public unsafe struct EFI_TCP4_TRANSMIT_DATA
 //  ///
 //  public EFI_TCP4_TRANSMIT_DATA* TxData;
 //}
-//} EFI_TCP4_IO_TOKEN;
+} 
 
 [StructLayout(LayoutKind.Sequential)]
 public unsafe struct EFI_TCP4_CLOSE_TOKEN
@@ -580,13 +580,13 @@ public unsafe struct EFI_TCP4_CLOSE_TOKEN
 [StructLayout(LayoutKind.Sequential)]
 public unsafe struct EFI_TCP4_PROTOCOL
 {
-  public readonly delegate* unmanaged</* IN */EFI_TCP4_PROTOCOL* /*This*/,/* OUT */EFI_TCP4_CONNECTION_STATE* /*Tcp4State*/,/* OUT */EFI_TCP4_CONFIG_DATA* /*Tcp4ConfigData*/,/* OUT */EFI_IP4_MODE_DATA* /*Ip4ModeData*/,/* OUT */EFI_MANAGED_NETWORK_CONFIG_DATA* /*MnpConfigData*/,/* OUT */EFI_SIMPLE_NETWORK_MODE* /*SnpModeData*/, EFI_STATUS> /*EFI_TCP4_GET_MODE_DATA*/ GetModeData;
+  //public readonly delegate* unmanaged</* IN */EFI_TCP4_PROTOCOL* /*This*/,/* OUT */EFI_TCP4_CONNECTION_STATE* /*Tcp4State*/,/* OUT */EFI_TCP4_CONFIG_DATA* /*Tcp4ConfigData*/,/* OUT */EFI_IP4_MODE_DATA* /*Ip4ModeData*/,/* OUT */EFI_MANAGED_NETWORK_CONFIG_DATA* /*MnpConfigData*/,/* OUT */EFI_SIMPLE_NETWORK_MODE* /*SnpModeData*/, EFI_STATUS> /*EFI_TCP4_GET_MODE_DATA*/ GetModeData;
   public readonly delegate* unmanaged</* IN */EFI_TCP4_PROTOCOL* /*This*/,/* IN */EFI_TCP4_CONFIG_DATA* /*TcpConfigData*/, EFI_STATUS> /*EFI_TCP4_CONFIGURE*/ Configure;
   public readonly delegate* unmanaged</* IN */EFI_TCP4_PROTOCOL* /*This*/,/* IN */bool /*DeleteRoute*/,/* IN */EFI_IPv4_ADDRESS* /*SubnetAddress*/,/* IN */EFI_IPv4_ADDRESS* /*SubnetMask*/,/* IN */EFI_IPv4_ADDRESS* /*GatewayAddress*/, EFI_STATUS> /*EFI_TCP4_ROUTES*/ Routes;
   public readonly delegate* unmanaged</* IN */EFI_TCP4_PROTOCOL* /*This*/,/* IN */EFI_TCP4_CONNECTION_TOKEN* /*ConnectionToken*/, EFI_STATUS> /*EFI_TCP4_CONNECT*/ Connect;
   public readonly delegate* unmanaged</* IN */EFI_TCP4_PROTOCOL* /*This*/,/* IN */EFI_TCP4_LISTEN_TOKEN* /*ListenToken*/, EFI_STATUS> /*EFI_TCP4_ACCEPT*/ Accept;
-  //public readonly delegate* unmanaged</* IN */EFI_TCP4_PROTOCOL* /*This*/,/* IN */EFI_TCP4_IO_TOKEN* /*Token*/, EFI_STATUS> /*EFI_TCP4_TRANSMIT*/ Transmit;
-  //public readonly delegate* unmanaged</* IN */EFI_TCP4_PROTOCOL* /*This*/,/* IN */EFI_TCP4_IO_TOKEN* /*Token*/, EFI_STATUS> /*EFI_TCP4_RECEIVE*/ Receive;
+  public readonly delegate* unmanaged</* IN */EFI_TCP4_PROTOCOL* /*This*/,/* IN */EFI_TCP4_IO_TOKEN* /*Token*/, EFI_STATUS> /*EFI_TCP4_TRANSMIT*/ Transmit;
+  public readonly delegate* unmanaged</* IN */EFI_TCP4_PROTOCOL* /*This*/,/* IN */EFI_TCP4_IO_TOKEN* /*Token*/, EFI_STATUS> /*EFI_TCP4_RECEIVE*/ Receive;
   public readonly delegate* unmanaged</* IN */EFI_TCP4_PROTOCOL* /*This*/,/* IN */EFI_TCP4_CLOSE_TOKEN* /*CloseToken*/, EFI_STATUS> /*EFI_TCP4_CLOSE*/ Close;
   public readonly delegate* unmanaged</* IN */EFI_TCP4_PROTOCOL* /*This*/,/* IN */EFI_TCP4_COMPLETION_TOKEN* /*Token*/, EFI_STATUS> /*EFI_TCP4_CANCEL*/ Cancel;
   public readonly delegate* unmanaged</* IN */EFI_TCP4_PROTOCOL* /*This*/, EFI_STATUS> /*EFI_TCP4_POLL*/ Poll;
