@@ -26,14 +26,14 @@ unsafe class Program
     _systemTable->BootServices->SetWatchdogTimer(0, 0, 0, null);
   }
 
-  public static void PutC(char c)
+  public static void OutputChar(char c)
   {
     var s = stackalloc char[2];
     s[0] = c;
     _systemTable->ConOut->OutputString(_systemTable->ConOut, s);
   }
 
-  public static void Puts(string s)
+  public static void OutputString(string s)
   {
     fixed (char* p = s)
     {
@@ -41,25 +41,25 @@ unsafe class Program
     }
   }
 
-  public static char Getc()
+  public static char GetChar()
   {
     EFI_INPUT_KEY key;
-    ulong waitidx;
+    ulong index;
 
-    _systemTable->BootServices->WaitForEvent(1, &(_systemTable->ConIn->WaitForKey), &waitidx);
+    _systemTable->BootServices->WaitForEvent(1, &(_systemTable->ConIn->WaitForKey), &index);
     while ((RETURN_STATUS)_systemTable->ConIn->ReadKeyStroke(_systemTable->ConIn, &key) > 0)
       ;
 
     return key.UnicodeChar;
   }
 
-  public static int Gets(char* buf, int bufSize)
+  public static int GetString(char* buf, int bufSize)
   {
     var i = 0;
     for (; i < bufSize - 1;)
     {
-      buf[i] = Getc();
-      PutC(buf[i]);
+      buf[i] = GetChar();
+      OutputChar(buf[i]);
       if (buf[i] == '\b')
       {
         i--;
@@ -67,7 +67,7 @@ unsafe class Program
       }
       else if (buf[i] == '\r')
       {
-        PutC('\n');
+        OutputChar('\n');
         break;
       }
       i++;
@@ -96,15 +96,15 @@ unsafe class Program
     var command = stackalloc char[CommandMaxLength];
     while (true)
     {
-      Puts("RaisingOS > ");
+      OutputString("RaisingOS > ");
 
-      if (Gets(command, CommandMaxLength) <= 0)
+      if (GetString(command, CommandMaxLength) <= 0)
         continue;
 
       if (StringCompare("hello", command))
-        Puts("Hello UEFI!\r\n");
+        OutputString("Hello UEFI!\r\n");
       else
-        Puts("Command not found.\r\n");
+        OutputString("Command not found.\r\n");
     }
   }
 }
