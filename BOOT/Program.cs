@@ -19,10 +19,27 @@ unsafe class Program
   public const int CommandMaxLength = 100;
 
   protected static EFI_SYSTEM_TABLE* _systemTable;
+  protected static EFI_SIMPLE_POINTER_PROTOCOL* _sop;
+  protected static EFI_GRAPHICS_OUTPUT_PROTOCOL* _gop;
 
   private static void EfiInit(EFI_SYSTEM_TABLE* systemTable)
   {
     _systemTable = systemTable;
+
+    var sopBytes = stackalloc byte[] { 0x9a, 0x4f, 0x0, 0x90, 0x27, 0x3f, 0xc1, 0x4d };
+    var EFI_SIMPLE_POINTER_PROTOCOL_GUID = new EFI_GUID(0x31878c87, 0xb75, 0x11d5, sopBytes);
+    fixed (EFI_SIMPLE_POINTER_PROTOCOL** p = &_sop)
+    {
+      _systemTable->BootServices->LocateProtocol(&EFI_SIMPLE_POINTER_PROTOCOL_GUID, null, (void**)p);
+    }
+
+    var gopBytes = stackalloc byte[] { 0x96, 0xfb, 0x7a, 0xde, 0xd0, 0x80, 0x51, 0x6a };
+    var EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID = new EFI_GUID(0x9042a9de, 0x23dc, 0x4a38, gopBytes);
+    fixed (EFI_GRAPHICS_OUTPUT_PROTOCOL** p = &_gop)
+    {
+      _systemTable->BootServices->LocateProtocol(&EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID, null, (void**)p);
+    }
+
     _systemTable->BootServices->SetWatchdogTimer(0, 0, 0, null);
   }
 

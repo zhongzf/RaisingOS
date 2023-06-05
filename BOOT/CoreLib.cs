@@ -71,6 +71,10 @@ namespace System
     {
       public const string UnmanagedSignatureCallingConvention = nameof(UnmanagedSignatureCallingConvention);
     }
+
+    public static class IsVolatile
+    {
+    }
   }
 }
 

@@ -258,7 +258,8 @@ public unsafe struct EFI_GRAPHICS_OUTPUT_PROTOCOL_MODE
   /// Base address of graphics linear frame buffer.
   /// Offset zero in FrameBufferBase represents the upper left pixel of the display.
   ///
-  public EFI_PHYSICAL_ADDRESS FrameBufferBase;
+  // TODO:
+  public ulong FrameBufferBase;
   ///
   /// Amount of frame buffer needed to support the active mode as defined by
   /// PixelsPerScanLine xVerticalResolution x PixelElementSize.
