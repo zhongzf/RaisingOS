@@ -21,7 +21,7 @@ namespace Uefi;
 
 public unsafe partial class EFI
 {
-  public static EFI_GUID EFI_FIRMWARE_VOLUME2_PROTOCOL_GUID = new GUID(0x220e73b6, 0x6bdb, 0x4413, new byte[] { 0x84, 0x5, 0xb9, 0x74, 0xb1, 0x8, 0x61, 0x9a });
+  public static EFI_GUID EFI_FIRMWARE_VOLUME2_PROTOCOL_GUID = new GUID(0x220e73b6, 0x6bdb, 0x4413, 0x84, 0x5, 0xb9, 0x74, 0xb1, 0x8, 0x61, 0x9a);
 
   // typedef struct _EFI_FIRMWARE_VOLUME2_PROTOCOL EFI_FIRMWARE_VOLUME2_PROTOCOL;
 }
@@ -739,10 +739,16 @@ public unsafe struct EFI_FIRMWARE_VOLUME2_PROTOCOL
 {
   public readonly delegate* unmanaged</* IN CONST */EFI_FIRMWARE_VOLUME2_PROTOCOL* /*This*/,/* OUT */EFI_FV_ATTRIBUTES* /*FvAttributes*/, EFI_STATUS> /*EFI_FV_GET_ATTRIBUTES*/ GetVolumeAttributes;
   public readonly delegate* unmanaged</* IN CONST */EFI_FIRMWARE_VOLUME2_PROTOCOL* /*This*/,/* IN OUT */EFI_FV_ATTRIBUTES* /*FvAttributes*/, EFI_STATUS> /*EFI_FV_SET_ATTRIBUTES*/ SetVolumeAttributes;
-  public readonly delegate* unmanaged</* IN CONST */EFI_FIRMWARE_VOLUME2_PROTOCOL* /*This*/,/* IN CONST */EFI_GUID* /*NameGuid*/,/* IN OUT */void** /*Buffer*/,/* IN OUT */ulong* /*BufferSize*/,/* OUT */EFI_FV_FILETYPE* /*FoundType*/,/* OUT */EFI_FV_FILE_ATTRIBUTES* /*FileAttributes*/,/* OUT */uint* /*AuthenticationStatus*/, EFI_STATUS> /*EFI_FV_READ_FILE*/ ReadFile;
-  public readonly delegate* unmanaged</* IN CONST */EFI_FIRMWARE_VOLUME2_PROTOCOL* /*This*/,/* IN CONST */EFI_GUID* /*NameGuid*/,/* IN */EFI_SECTION_TYPE /*SectionType*/,/* IN */ulong /*SectionInstance*/,/* IN OUT */void** /*Buffer*/,/* IN OUT */ulong* /*BufferSize*/,/* OUT */uint* /*AuthenticationStatus*/, EFI_STATUS> /*EFI_FV_READ_SECTION*/ ReadSection;
+  //public readonly delegate* unmanaged</* IN CONST */EFI_FIRMWARE_VOLUME2_PROTOCOL* /*This*/,/* IN CONST */EFI_GUID* /*NameGuid*/,/* IN OUT */void** /*Buffer*/,/* IN OUT */ulong* /*BufferSize*/,/* OUT */EFI_FV_FILETYPE* /*FoundType*/,/* OUT */EFI_FV_FILE_ATTRIBUTES* /*FileAttributes*/,/* OUT */uint* /*AuthenticationStatus*/, EFI_STATUS> /*EFI_FV_READ_FILE*/ ReadFile;
+  public void* ReadFile;
+
+  //public readonly delegate* unmanaged</* IN CONST */EFI_FIRMWARE_VOLUME2_PROTOCOL* /*This*/,/* IN CONST */EFI_GUID* /*NameGuid*/,/* IN */EFI_SECTION_TYPE /*SectionType*/,/* IN */ulong /*SectionInstance*/,/* IN OUT */void** /*Buffer*/,/* IN OUT */ulong* /*BufferSize*/,/* OUT */uint* /*AuthenticationStatus*/, EFI_STATUS> /*EFI_FV_READ_SECTION*/ ReadSection;
+  public void* ReadSection;
+
   public readonly delegate* unmanaged</* IN CONST */EFI_FIRMWARE_VOLUME2_PROTOCOL* /*This*/,/* IN */uint /*NumberOfFiles*/,/* IN */EFI_FV_WRITE_POLICY /*WritePolicy*/,/* IN */EFI_FV_WRITE_FILE_DATA* /*FileData*/, EFI_STATUS> /*EFI_FV_WRITE_FILE*/ WriteFile;
-  public readonly delegate* unmanaged</* IN CONST */EFI_FIRMWARE_VOLUME2_PROTOCOL* /*This*/,/* IN OUT */void* /*Key*/,/* IN OUT */EFI_FV_FILETYPE* /*FileType*/,/* OUT */EFI_GUID* /*NameGuid*/,/* OUT */EFI_FV_FILE_ATTRIBUTES* /*Attributes*/,/* OUT */ulong* /*Size*/, EFI_STATUS> /*EFI_FV_GET_NEXT_FILE*/ GetNextFile;
+
+  //public readonly delegate* unmanaged</* IN CONST */EFI_FIRMWARE_VOLUME2_PROTOCOL* /*This*/,/* IN OUT */void* /*Key*/,/* IN OUT */EFI_FV_FILETYPE* /*FileType*/,/* OUT */EFI_GUID* /*NameGuid*/,/* OUT */EFI_FV_FILE_ATTRIBUTES* /*Attributes*/,/* OUT */ulong* /*Size*/, EFI_STATUS> /*EFI_FV_GET_NEXT_FILE*/ GetNextFile;
+  public void* GetNextFile;
 
   ///
   /// Data field that indicates the size in bytes

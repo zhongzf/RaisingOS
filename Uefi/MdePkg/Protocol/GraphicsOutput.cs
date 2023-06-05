@@ -17,7 +17,7 @@ namespace Uefi;
 public unsafe partial class EFI
 {
   public static EFI_GUID EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID = new GUID(
-      0x9042a9de, 0x23dc, 0x4a38, new byte[] { 0x96, 0xfb, 0x7a, 0xde, 0xd0, 0x80, 0x51, 0x6a });
+      0x9042a9de, 0x23dc, 0x4a38, 0x96, 0xfb, 0x7a, 0xde, 0xd0, 0x80, 0x51, 0x6a);
 
   // typedef struct _EFI_GRAPHICS_OUTPUT_PROTOCOL EFI_GRAPHICS_OUTPUT_PROTOCOL;
 }
@@ -258,8 +258,7 @@ public unsafe struct EFI_GRAPHICS_OUTPUT_PROTOCOL_MODE
   /// Base address of graphics linear frame buffer.
   /// Offset zero in FrameBufferBase represents the upper left pixel of the display.
   ///
-  // TODO:
-  public ulong FrameBufferBase;
+  public EFI_PHYSICAL_ADDRESS FrameBufferBase;
   ///
   /// Amount of frame buffer needed to support the active mode as defined by
   /// PixelsPerScanLine xVerticalResolution x PixelElementSize.

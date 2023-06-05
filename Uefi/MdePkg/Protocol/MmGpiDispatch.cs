@@ -28,7 +28,7 @@ namespace Uefi;
 public unsafe partial class EFI
 {
   public static EFI_GUID EFI_MM_GPI_DISPATCH_PROTOCOL_GUID = new GUID(
-      0x25566b03, 0xb577, 0x4cbf, new byte[] { 0x95, 0x8c, 0xed, 0x66, 0x3e, 0xa2, 0x43, 0x80 });
+      0x25566b03, 0xb577, 0x4cbf, 0x95, 0x8c, 0xed, 0x66, 0x3e, 0xa2, 0x43, 0x80);
 }
 
 ///
@@ -114,6 +114,8 @@ public unsafe struct EFI_MM_GPI_REGISTER_CONTEXT
 public unsafe struct EFI_MM_GPI_DISPATCH_PROTOCOL
 {
   //public readonly delegate* unmanaged</* IN CONST */EFI_MM_GPI_DISPATCH_PROTOCOL* /*This*/,/* IN */EFI_MM_HANDLER_ENTRY_POINT /*DispatchFunction*/,/* IN CONST */EFI_MM_GPI_REGISTER_CONTEXT* /*RegisterContext*/,/* OUT */EFI_HANDLE* /*DispatchHandle*/, EFI_STATUS> /*EFI_MM_GPI_REGISTER*/ Register;
+  public void* Register;
+
   public readonly delegate* unmanaged</* IN CONST */EFI_MM_GPI_DISPATCH_PROTOCOL* /*This*/,/* IN */EFI_HANDLE /*DispatchHandle*/, EFI_STATUS> /*EFI_MM_GPI_UNREGISTER*/ UnRegister;
   ///
   /// Denotes the maximum value of inputs that can have handlers attached.
