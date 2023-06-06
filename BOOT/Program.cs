@@ -1,16 +1,22 @@
-﻿using System;
+﻿using BOOT;
+using System;
 using System.Runtime;
 //using BOOT.Uefi;
 using Uefi;
 
 unsafe class Program
 {
+  public const int CommandMaxLength = 100;
+
+  protected static EFI_SYSTEM_TABLE* _systemTable;
+  protected static EFI_SIMPLE_POINTER_PROTOCOL* _sop;
+  protected static EFI_GRAPHICS_OUTPUT_PROTOCOL* _gop;
+
   static void Main() { }
 
   [RuntimeExport("EfiMain")]
   static EFI_STATUS EfiMain(EFI_HANDLE imageHandle, EFI_SYSTEM_TABLE* systemTable)
   {
-    systemTable->ConOut->ClearScreen(systemTable->ConOut);
     EfiInit(systemTable);
 
     Shell();
@@ -18,63 +24,11 @@ unsafe class Program
     return (EFI_STATUS)(RETURN_STATUS)0;
   }
 
-  private static void GUI()
-  {
-    #region Cursor
-    #pragma warning disable format
-    var cursor = stackalloc int[]
-    {
-            1,0,0,0,0,0,0,0,0,0,0,0,
-            1,1,0,0,0,0,0,0,0,0,0,0,
-            1,2,1,0,0,0,0,0,0,0,0,0,
-            1,2,2,1,0,0,0,0,0,0,0,0,
-            1,2,2,2,1,0,0,0,0,0,0,0,
-            1,2,2,2,2,1,0,0,0,0,0,0,
-            1,2,2,2,2,2,1,0,0,0,0,0,
-            1,2,2,2,2,2,2,1,0,0,0,0,
-            1,2,2,2,2,2,2,2,1,0,0,0,
-            1,2,2,2,2,2,2,2,2,1,0,0,
-            1,2,2,2,2,2,2,2,2,2,1,0,
-            1,2,2,2,2,2,2,2,2,2,2,1,
-            1,2,2,2,2,2,2,1,1,1,1,1,
-            1,2,2,2,1,2,2,1,0,0,0,0,
-            1,2,2,1,0,1,2,2,1,0,0,0,
-            1,2,1,0,0,1,2,2,1,0,0,0,
-            1,1,0,0,0,0,1,2,2,1,0,0,
-            0,0,0,0,0,0,1,2,2,1,0,0,
-            0,0,0,0,0,0,0,1,1,0,0,0
-    };
-    #pragma warning disable format
-    #endregion
-
-    GetFrameBuffer(out var fb, out var width, out var height);
-
-    EFI_SIMPLE_POINTER_STATE sts;
-    float MouseSpeed = 200;
-
-    int CursorX = 0;
-    int CursorY = 0;
-
-    for (; ; )
-    {
-      _sop->GetState(_sop, &sts);
-
-      CursorX = Clamp(CursorX + (int)((sts.RelativeMovementX / 65536f) * MouseSpeed), 0, (int)width);
-      CursorY = Clamp(CursorY + (int)((sts.RelativeMovementY / 65536f) * MouseSpeed), 0, (int)height);
-
-      DrawCursor(cursor, fb, width, height, CursorX, CursorY);
-    }
-  }
-
-  public const int CommandMaxLength = 100;
-
-  protected static EFI_SYSTEM_TABLE* _systemTable;
-  protected static EFI_SIMPLE_POINTER_PROTOCOL* _sop;
-  protected static EFI_GRAPHICS_OUTPUT_PROTOCOL* _gop;
-
   private static void EfiInit(EFI_SYSTEM_TABLE* systemTable)
   {
     _systemTable = systemTable;
+    _systemTable->ConOut->ClearScreen(systemTable->ConOut);
+    _systemTable->BootServices->SetWatchdogTimer(0, 0, 0, null);
 
     EFI_GUID EFI_SIMPLE_POINTER_PROTOCOL_GUID = /*EFI.EFI_SIMPLE_POINTER_PROTOCOL_GUID;//*/ new GUID(0x31878c87, 0xb75, 0x11d5, 0x9a, 0x4f, 0x0, 0x90, 0x27, 0x3f, 0xc1, 0x4d);
     fixed (EFI_SIMPLE_POINTER_PROTOCOL** p = &_sop)
@@ -87,8 +41,6 @@ unsafe class Program
     {
       _systemTable->BootServices->LocateProtocol(&EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID, null, (void**)p);
     }
-
-    _systemTable->BootServices->SetWatchdogTimer(0, 0, 0, null);
   }
 
   public static void OutputChar(char c)
@@ -160,33 +112,8 @@ unsafe class Program
     return true;
   }
 
-  public static void Shell()
-  {
-    var command = stackalloc char[CommandMaxLength];
-    while (true)
-    {
-      OutputString("RaisingOS > ");
 
-      if (GetString(command, CommandMaxLength) <= 0)
-        continue;
-
-      if (StringCompare("hello", command))
-      {
-        OutputString("Hello UEFI!\r\n");
-      }
-      else if (StringCompare("gui", command))
-      {
-        GUI();
-      }
-      else
-      {
-        OutputString("Command not found.\r\n");
-      }
-    }
-  }
-
-
-  public static void DrawCursor(int* cursor, uint* fb, uint width, uint height, int x, int y)
+  public static void DrawCursor(uint* fb, int* cursor, int x, int y)
   {
     for (int h = 0; h < 19; h++)
     {
@@ -194,21 +121,79 @@ unsafe class Program
       {
         if (cursor[h * 12 + w] == 1)
         {
-          SetPixel(fb, width, height, w + x, h + y, 0);
+          SetPixel(fb, w + x, h + y, 0);
         }
         if (cursor[h * 12 + w] == 2)
         {
-          SetPixel(fb, width, height, w + x, h + y, 0xFFFFFFFF);
+          SetPixel(fb, w + x, h + y, 0xFFFFFFFF);
         }
       }
     }
   }
 
-  public static void SetPixel(uint* fb, uint width, uint height, int x, int y, uint color)
+  public static void SetPixel(uint* fb, int x, int y, uint color)
   {
-    Clamp(x, 0, (int)width);
-    Clamp(y, 0, (int)height);
+    var width = _gop->Mode->Info->HorizontalResolution;
     fb[width * y + x] = color;
+  }
+
+  public static uint GetPixel(uint* fb, int x, int y)
+  {
+    var width = _gop->Mode->Info->HorizontalResolution;
+    return fb[width * y + x];
+  }
+
+  public static void DrawLine(uint* fb, Point p1, Point p2, uint color)
+  {
+    int x0 = (int)p1.x;
+    int y0 = (int)p1.y;
+    int x1 = (int)p2.x;
+    int y1 = (int)p2.y;
+    DrawLine(fb, x0, y0, x1, y1, color);
+  }
+
+  public static void DrawLine(uint* fb, int x0, int y0, int x1, int y1, uint color)
+  {
+    int dx = (x0 < x1) ? (x1 - x0) : (x0 - x1);
+    int sx = (x0 < x1) ? 1 : -1;
+    int dy = (y0 < y1) ? (y1 - y0) : (y0 - y1);
+    int sy = (y0 < y1) ? 1 : -1;
+    int e2, err = dx - dy;
+    while (true)
+    {
+      SetPixel(fb, x0, y0, color);
+
+      if ((x0 == x1) && (y0 == y1)) return;
+
+      e2 = 2 * err;
+      if (e2 > -dy)
+      {
+        err -= dy;
+        x0 += sx;
+      }
+      if (e2 < dx)
+      {
+        err += dx;
+        y0 += sy;
+      }
+    }
+  }
+
+  public static void DrawRectangle(uint* fb, Rectangle rect, uint color)
+  {
+    int x = (int)rect.point.x;
+    int y = (int)rect.point.y;
+    int width = (int)rect.size.width;
+    int height = (int)rect.size.height;
+    DrawRectangle(fb, x, y, width, height, color);
+  }
+
+  public static void DrawRectangle(uint* fb, int x, int y, int width, int height, uint color)
+  {
+    DrawLine(fb, x, y, x + width, y, color);
+    DrawLine(fb, x + width, y, x + width, y + height, color);
+    DrawLine(fb, x + width, y + height, x, y + height, color);
+    DrawLine(fb, x, y + height, x, y, color);
   }
 
   public static int Clamp(int value, int min, int max)
@@ -227,5 +212,90 @@ unsafe class Program
 
     _sop->Mode->ResolutionX = width;
     _sop->Mode->ResolutionY = height;
+  }
+
+
+  private static void GUI()
+  {
+    #region Cursor
+    #pragma warning disable format
+    var cursor = stackalloc int[]
+    {
+            1,0,0,0,0,0,0,0,0,0,0,0,
+            1,1,0,0,0,0,0,0,0,0,0,0,
+            1,2,1,0,0,0,0,0,0,0,0,0,
+            1,2,2,1,0,0,0,0,0,0,0,0,
+            1,2,2,2,1,0,0,0,0,0,0,0,
+            1,2,2,2,2,1,0,0,0,0,0,0,
+            1,2,2,2,2,2,1,0,0,0,0,0,
+            1,2,2,2,2,2,2,1,0,0,0,0,
+            1,2,2,2,2,2,2,2,1,0,0,0,
+            1,2,2,2,2,2,2,2,2,1,0,0,
+            1,2,2,2,2,2,2,2,2,2,1,0,
+            1,2,2,2,2,2,2,2,2,2,2,1,
+            1,2,2,2,2,2,2,1,1,1,1,1,
+            1,2,2,2,1,2,2,1,0,0,0,0,
+            1,2,2,1,0,1,2,2,1,0,0,0,
+            1,2,1,0,0,1,2,2,1,0,0,0,
+            1,1,0,0,0,0,1,2,2,1,0,0,
+            0,0,0,0,0,0,1,2,2,1,0,0,
+            0,0,0,0,0,0,0,1,1,0,0,0
+    };
+    #pragma warning disable format
+    #endregion
+
+    GetFrameBuffer(out var fb, out var width, out var height);
+
+    EFI_SIMPLE_POINTER_STATE sts;
+    float MouseSpeed = 200;
+
+    int cursorX = 0;
+    int cursorY = 0;
+
+    for (; ; )
+    {
+      _sop->GetState(_sop, &sts);
+
+      cursorX = Clamp(cursorX + (int)((sts.RelativeMovementX / 65536f) * MouseSpeed), 0, (int)width);
+      cursorY = Clamp(cursorY + (int)((sts.RelativeMovementY / 65536f) * MouseSpeed), 0, (int)height);
+
+      DrawCursor(fb, cursor, cursorX, cursorY);
+    }
+  }
+
+  public static void Rect()
+  {
+    GetFrameBuffer(out var fb, out var width, out var height);
+
+    DrawRectangle(fb, 10, 10, 100, 100, 0xFF0000FF);
+  }
+
+  public static void Shell()
+  {
+    var command = stackalloc char[CommandMaxLength];
+    while (true)
+    {
+      OutputString("RaisingOS > ");
+
+      if (GetString(command, CommandMaxLength) <= 0)
+        continue;
+
+      if (StringCompare("hello", command))
+      {
+        OutputString("Hello UEFI!\r\n");
+      }
+      else if (StringCompare("gui", command))
+      {
+        GUI();
+      }
+      else if(StringCompare("rect", command))
+      {
+        Rect();
+      }
+      else
+      {
+        OutputString("Command not found.\r\n");
+      }
+    }
   }
 }
