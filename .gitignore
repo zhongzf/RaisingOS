@@ -399,3 +399,4 @@ FodyWeavers.xsd
 *.scoreboard
 ROOT/EFI/BOOT/BOOTX64.efi
 RaisingOS.nvram
+RaisingOS.vhd

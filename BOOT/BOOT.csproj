@@ -50,6 +50,7 @@
     <WriteLinesToFile File="$(IntermediateOutputPath)detachvhd.txt" Overwrite="true" Lines="$(DetachVHDLines)" />
     <Exec Command="diskpart /s &quot;$(IntermediateOutputPath)detachvhd.txt&quot;" />
     <Message Text="Created VHDX at $(VHDFilePath)." Importance="High" />
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\$(NativeOutputPath)$(TargetName).vhd" DestinationFiles="$(MSBuildProjectDirectory)\..\RaisingOS.vhd"></Copy>
   </Target>
   
   <Target Name="RunVMware" AfterTargets="CreateVHD">
