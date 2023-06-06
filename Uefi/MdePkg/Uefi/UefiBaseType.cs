@@ -33,7 +33,7 @@ public unsafe struct EFI_GUID
   public static implicit operator EFI_GUID(GUID value) => new EFI_GUID() { Value = value };
   public static implicit operator GUID(EFI_GUID value) => value.Value;
 
-  public static explicit operator EFI_GUID*(EFI_GUID guid) => &guid;
+  public static explicit operator EFI_GUID*(EFI_GUID value) => &value;
 }
 
 ///
