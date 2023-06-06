@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime;
 using Uefi;
-using BOOT;
+using BOOT.Graphics;
 
 unsafe class Program
 {

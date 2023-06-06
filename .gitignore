@@ -400,3 +400,5 @@ FodyWeavers.xsd
 ROOT/EFI/BOOT/BOOTX64.efi
 RaisingOS.nvram
 RaisingOS.vhd
+*.vmem
+*.lck
