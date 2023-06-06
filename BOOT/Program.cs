@@ -6,10 +6,12 @@ using BOOT.Graphics;
 unsafe class Program
 {
   public const int CommandMaxLength = 100;
+  public const int MaxBufferSize = 16;
 
   protected static EFI_SYSTEM_TABLE* _systemTable;
   protected static EFI_SIMPLE_POINTER_PROTOCOL* _sop;
   protected static EFI_GRAPHICS_OUTPUT_PROTOCOL* _gop;
+  protected static EFI_SIMPLE_FILE_SYSTEM_PROTOCOL* _sfsp;
 
   static void Main() { }
 
@@ -38,7 +40,13 @@ unsafe class Program
     {
       _systemTable->BootServices->LocateProtocol((EFI_GUID*)EFI.EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID, null, (void**)p);
     }
+
+    fixed (EFI_SIMPLE_FILE_SYSTEM_PROTOCOL** p = &_sfsp)
+    {
+      _systemTable->BootServices->LocateProtocol((EFI_GUID*)EFI.EFI_SIMPLE_FILE_SYSTEM_PROTOCOL_GUID, null, (void**)p);
+    }
   }
+
 
   public static void OutputChar(char c)
   {
@@ -53,6 +61,11 @@ unsafe class Program
     {
       _systemTable->ConOut->OutputString(_systemTable->ConOut, p);
     }
+  }
+
+  public static void OutputString(char* s)
+  {
+    _systemTable->ConOut->OutputString(_systemTable->ConOut, s);
   }
 
   public static char GetChar()
@@ -212,6 +225,26 @@ unsafe class Program
   }
 
 
+  public static void Ls()
+  {
+    var fileBuffer = stackalloc char[MaxBufferSize];
+    EFI_FILE_PROTOCOL* root;
+    ulong bufferSize = 32;
+    EFI_FILE_INFO* fileInfo;
+
+    var status = _sfsp->OpenVolume(_sfsp, &root);
+    while (true)
+    {
+      status = root->Read(root, &bufferSize, (void*)fileBuffer);
+      if (bufferSize == 0) break;
+
+      fileInfo = (EFI_FILE_INFO*)fileBuffer;
+
+      OutputString(fileInfo->FileName);
+      OutputString("\r\n");
+    }
+  }
+
   private static void GUI()
   {
     #region Cursor
@@ -288,6 +321,10 @@ unsafe class Program
       else if(StringCompare("rect", command))
       {
         Rect();
+      }
+      else if(StringCompare("ls", command))
+      {
+        Ls();
       }
       else
       {
