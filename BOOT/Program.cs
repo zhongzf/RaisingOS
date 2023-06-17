@@ -2,11 +2,14 @@
 using System.Runtime;
 using Uefi;
 using BOOT.Graphics;
+using BOOT.FileSystem;
+using Internal.Runtime.CompilerHelpers;
 
 unsafe class Program
 {
   public const int CommandMaxLength = 100;
-  public const int MaxBufferSize = 16;
+  public const int MaxBufferSize = 1024;
+  public const int MaxFileNumber = 1024;
 
   protected static EFI_SYSTEM_TABLE* _systemTable;
   protected static EFI_SIMPLE_POINTER_PROTOCOL* _sop;
@@ -28,6 +31,8 @@ unsafe class Program
   private static void EfiInit(EFI_SYSTEM_TABLE* systemTable)
   {
     _systemTable = systemTable;
+    StartupCodeHelpers.SystemTable = _systemTable;
+
     _systemTable->ConOut->ClearScreen(systemTable->ConOut);
     _systemTable->BootServices->SetWatchdogTimer(0, 0, 0, null);
 
@@ -47,7 +52,7 @@ unsafe class Program
     }
   }
 
-
+  #region Shell
   public static void OutputChar(char c)
   {
     var s = stackalloc char[2];
@@ -122,7 +127,16 @@ unsafe class Program
     return true;
   }
 
+  public static void StringCopy(char* s1, char* s2, int length)
+  {
+    for (int i = 0; i < length; i++)
+    {
+      s2[i] = s1[i];
+    }
+  }
+  #endregion
 
+  #region GUI
   public static void DrawCursor(uint* fb, int* cursor, int x, int y)
   {
     for (int h = 0; h < 19; h++)
@@ -223,15 +237,18 @@ unsafe class Program
     _sop->Mode->ResolutionX = width;
     _sop->Mode->ResolutionY = height;
   }
-
+  #endregion
 
   public static void Ls()
   {
+    //var fileList = stackalloc File[MaxFileNumber];
+    File file = default;
     var fileBuffer = stackalloc char[MaxBufferSize];
     EFI_FILE_PROTOCOL* root;
-    ulong bufferSize = 32;
+    ulong bufferSize = 0;
     EFI_FILE_INFO* fileInfo;
 
+    //var i = 0;
     var status = _sfsp->OpenVolume(_sfsp, &root);
     while (true)
     {
@@ -239,10 +256,19 @@ unsafe class Program
       if (bufferSize == 0) break;
 
       fileInfo = (EFI_FILE_INFO*)fileBuffer;
+      //StringCopy(fileInfo->FileName, fileList[i].Name, (int)bufferSize);
+      //fileList[i].Name[bufferSize] = '\0';
+
+      //StringCopy(fileInfo->FileName, file.Name, (int)bufferSize);
+      //file.Name[bufferSize] = '\0';
+      //OutputString(file.Name);
 
       OutputString(fileInfo->FileName);
       OutputString("\r\n");
+      //i++;
     }
+    root->Close(root);
+    //return i;
   }
 
   private static void GUI()
