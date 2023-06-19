@@ -9,7 +9,7 @@ namespace BOOT.FileSystem
   {
     public fixed char Name[16];
 
-    public Rectangle Rectangle { get; set; }
-    public bool IsHighlighted { get; set; }
+    public Rectangle Rectangle;
+    public bool IsHighlighted;
   }
 }

@@ -240,6 +240,12 @@ unsafe class Program
     _spp->Mode->ResolutionX = width;
     _spp->Mode->ResolutionY = height;
   }
+
+  public static bool IsInRectangle(int x, int y, Rectangle r)
+  {
+    return ((r.Point.X <= x) && (x <= (r.Point.X + r.Size.Width - 1)) && (r.Point.Y <= y) && (y <= (r.Point.Y + r.Size.Height - 1)));
+  }
+
   #endregion
 
   public static int LsGUI()
@@ -267,21 +273,84 @@ unsafe class Program
         fileList[i].Name[bufferSize] = '\0';
       }
 
-      var rectangle = fileList[i].Rectangle;
-      rectangle.Point.X = (uint)(i * FileRectangleWidth);
-      rectangle.Point.Y = 0;
-      rectangle.Size.Width = FileRectangleWidth;
-      rectangle.Size.Height = FileRectangleHeight;
+      fileList[i].Rectangle.Point.X = (uint)(i * FileRectangleWidth);
+      fileList[i].Rectangle.Point.Y = 0;
+      fileList[i].Rectangle.Size.Width = FileRectangleWidth;
+      fileList[i].Rectangle.Size.Height = FileRectangleHeight;
 
-      DrawRectangle(fb, rectangle, 0xFFFFFFFF);
+      DrawRectangle(fb, fileList[i].Rectangle, 0xFFFFFFFF);
 
       i++;
     }
     root->Close(root);
 
+    #region Cursor
+    #pragma warning disable format
+    var cursor = stackalloc int[]
+    {
+            1,0,0,0,0,0,0,0,0,0,0,0,
+            1,1,0,0,0,0,0,0,0,0,0,0,
+            1,2,1,0,0,0,0,0,0,0,0,0,
+            1,2,2,1,0,0,0,0,0,0,0,0,
+            1,2,2,2,1,0,0,0,0,0,0,0,
+            1,2,2,2,2,1,0,0,0,0,0,0,
+            1,2,2,2,2,2,1,0,0,0,0,0,
+            1,2,2,2,2,2,2,1,0,0,0,0,
+            1,2,2,2,2,2,2,2,1,0,0,0,
+            1,2,2,2,2,2,2,2,2,1,0,0,
+            1,2,2,2,2,2,2,2,2,2,1,0,
+            1,2,2,2,2,2,2,2,2,2,2,1,
+            1,2,2,2,2,2,2,1,1,1,1,1,
+            1,2,2,2,1,2,2,1,0,0,0,0,
+            1,2,2,1,0,1,2,2,1,0,0,0,
+            1,2,1,0,0,1,2,2,1,0,0,0,
+            1,1,0,0,0,0,1,2,2,1,0,0,
+            0,0,0,0,0,0,1,2,2,1,0,0,
+            0,0,0,0,0,0,0,1,1,0,0,0
+    };
+    #pragma warning disable format
+    #endregion
+
+
     int fileNumber = i;
 
+    ulong index;
+    EFI_SIMPLE_POINTER_STATE sts;
+    int cursorX = 0;
+    int cursorY = 0;
+    float MouseSpeed = 200;
 
+    _spp->Reset(_spp, false);
+    while (true)
+    {
+      _systemTable->BootServices->WaitForEvent(1, &(_spp->WaitForInput), &index);
+      _spp->GetState(_spp, &sts);
+
+      for (i = 0; i < fileNumber; i++)
+      {
+        cursorX = Clamp(cursorX + (int)((sts.RelativeMovementX / 65536f) * MouseSpeed), 0, (int)width);
+        cursorY = Clamp(cursorY + (int)((sts.RelativeMovementY / 65536f) * MouseSpeed), 0, (int)height);
+
+        //DrawCursor(fb, cursor, cursorX, cursorY);
+
+        if (IsInRectangle(cursorX, cursorY, fileList[i].Rectangle))
+        {
+          if (!fileList[i].IsHighlighted)
+          {
+            DrawRectangle(fb, fileList[i].Rectangle, 0xFFFFFF00);
+            fileList[i].IsHighlighted = true;
+          }
+        }
+        else
+        {
+          if (fileList[i].IsHighlighted)
+          {
+            DrawRectangle(fb, fileList[i].Rectangle, 0xFFFFFFFF);
+            fileList[i].IsHighlighted = false;
+          }
+        }
+      }
+    }
 
     return fileNumber;
   }
