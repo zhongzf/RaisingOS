@@ -127,6 +127,9 @@ namespace System.Runtime.InteropServices
 
 namespace System
 {
+  public class Type { }
+  public class RuntimeType : Type { }
+
   //public readonly ref struct ReadOnlySpan<T>
   //{
   //  private readonly ref T _reference;
@@ -234,6 +237,15 @@ namespace System.Runtime.CompilerServices
   }
 }
 
+namespace Internal.Runtime.CompilerHelpers
+{
+  class ThrowHelpers
+  {
+    static void ThrowIndexOutOfRangeException() { }
+    static void ThrowDivideByZeroException() { }
+  }
+}
+
 #region Things needed by ILC
 namespace System
 {
@@ -338,7 +350,7 @@ namespace Internal.Runtime.CompilerHelpers
       {
         RhpFallbackFailFast();
       }
-    
+
       element = obj;
     }
 
