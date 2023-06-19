@@ -241,14 +241,14 @@ unsafe class Program
 
   public static void Ls()
   {
-    //var fileList = stackalloc File[MaxFileNumber];
-    File file = default;
+    var fileList = new File[MaxFileNumber];
+    //File file = default;
     var fileBuffer = stackalloc char[MaxBufferSize];
     EFI_FILE_PROTOCOL* root;
     ulong bufferSize = 0;
     EFI_FILE_INFO* fileInfo;
 
-    //var i = 0;
+    var i = 0;
     var status = _sfsp->OpenVolume(_sfsp, &root);
     while (true)
     {
@@ -256,16 +256,20 @@ unsafe class Program
       if (bufferSize == 0) break;
 
       fileInfo = (EFI_FILE_INFO*)fileBuffer;
-      //StringCopy(fileInfo->FileName, fileList[i].Name, (int)bufferSize);
-      //fileList[i].Name[bufferSize] = '\0';
+      fixed (char* pName = fileList[i].Name)
+      {
+        StringCopy(fileInfo->FileName, pName, (int)bufferSize);
+        fileList[i].Name[bufferSize] = '\0';
+        OutputString(pName);
+      }
 
       //StringCopy(fileInfo->FileName, file.Name, (int)bufferSize);
       //file.Name[bufferSize] = '\0';
       //OutputString(file.Name);
 
-      OutputString(fileInfo->FileName);
+      //OutputString(fileInfo->FileName);
       OutputString("\r\n");
-      //i++;
+      i++;
     }
     root->Close(root);
     //return i;
