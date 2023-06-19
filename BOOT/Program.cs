@@ -11,8 +11,11 @@ unsafe class Program
   public const int MaxBufferSize = 1024;
   public const int MaxFileNumber = 1024;
 
+  public const int FileRectangleWidth = 64;
+  public const int FileRectangleHeight = 64;
+
   protected static EFI_SYSTEM_TABLE* _systemTable;
-  protected static EFI_SIMPLE_POINTER_PROTOCOL* _sop;
+  protected static EFI_SIMPLE_POINTER_PROTOCOL* _spp;
   protected static EFI_GRAPHICS_OUTPUT_PROTOCOL* _gop;
   protected static EFI_SIMPLE_FILE_SYSTEM_PROTOCOL* _sfsp;
 
@@ -36,7 +39,7 @@ unsafe class Program
     _systemTable->ConOut->ClearScreen(systemTable->ConOut);
     _systemTable->BootServices->SetWatchdogTimer(0, 0, 0, null);
 
-    fixed (EFI_SIMPLE_POINTER_PROTOCOL** p = &_sop)
+    fixed (EFI_SIMPLE_POINTER_PROTOCOL** p = &_spp)
     {
       _systemTable->BootServices->LocateProtocol((EFI_GUID*)EFI.EFI_SIMPLE_POINTER_PROTOCOL_GUID, null, (void**)p);
     }
@@ -169,10 +172,10 @@ unsafe class Program
 
   public static void DrawLine(uint* fb, Point p1, Point p2, uint color)
   {
-    int x0 = (int)p1.x;
-    int y0 = (int)p1.y;
-    int x1 = (int)p2.x;
-    int y1 = (int)p2.y;
+    int x0 = (int)p1.X;
+    int y0 = (int)p1.Y;
+    int x1 = (int)p2.X;
+    int y1 = (int)p2.Y;
     DrawLine(fb, x0, y0, x1, y1, color);
   }
 
@@ -205,10 +208,10 @@ unsafe class Program
 
   public static void DrawRectangle(uint* fb, Rectangle rect, uint color)
   {
-    int x = (int)rect.point.x;
-    int y = (int)rect.point.y;
-    int width = (int)rect.size.width;
-    int height = (int)rect.size.height;
+    int x = (int)rect.Point.X;
+    int y = (int)rect.Point.Y;
+    int width = (int)rect.Size.Width;
+    int height = (int)rect.Size.Height;
     DrawRectangle(fb, x, y, width, height, color);
   }
 
@@ -234,12 +237,56 @@ unsafe class Program
     width = _gop->Mode->Info->HorizontalResolution;
     height = _gop->Mode->Info->VerticalResolution;
 
-    _sop->Mode->ResolutionX = width;
-    _sop->Mode->ResolutionY = height;
+    _spp->Mode->ResolutionX = width;
+    _spp->Mode->ResolutionY = height;
   }
   #endregion
 
-  public static void Ls()
+  public static int LsGUI()
+  {
+    var fileList = new File[MaxFileNumber];
+    var fileBuffer = stackalloc char[MaxBufferSize];
+
+    EFI_FILE_PROTOCOL* root;
+    ulong bufferSize = 0;
+    EFI_FILE_INFO* fileInfo;
+
+    GetFrameBuffer(out var fb, out var width, out var height);
+
+    var i = 0;
+    var status = _sfsp->OpenVolume(_sfsp, &root);
+    while (true)
+    {
+      status = root->Read(root, &bufferSize, (void*)fileBuffer);
+      if (bufferSize == 0) break;
+
+      fileInfo = (EFI_FILE_INFO*)fileBuffer;
+      fixed (char* pName = fileList[i].Name)
+      {
+        StringCopy(fileInfo->FileName, pName, (int)bufferSize);
+        fileList[i].Name[bufferSize] = '\0';
+      }
+
+      var rectangle = fileList[i].Rectangle;
+      rectangle.Point.X = (uint)(i * FileRectangleWidth);
+      rectangle.Point.Y = 0;
+      rectangle.Size.Width = FileRectangleWidth;
+      rectangle.Size.Height = FileRectangleHeight;
+
+      DrawRectangle(fb, rectangle, 0xFFFFFFFF);
+
+      i++;
+    }
+    root->Close(root);
+
+    int fileNumber = i;
+
+
+
+    return fileNumber;
+  }
+
+  public static int Ls()
   {
     var fileList = new File[MaxFileNumber];
     //File file = default;
@@ -272,7 +319,7 @@ unsafe class Program
       i++;
     }
     root->Close(root);
-    //return i;
+    return i;
   }
 
   private static void GUI()
@@ -314,7 +361,7 @@ unsafe class Program
 
     for (; ; )
     {
-      _sop->GetState(_sop, &sts);
+      _spp->GetState(_spp, &sts);
 
       cursorX = Clamp(cursorX + (int)((sts.RelativeMovementX / 65536f) * MouseSpeed), 0, (int)width);
       cursorY = Clamp(cursorY + (int)((sts.RelativeMovementY / 65536f) * MouseSpeed), 0, (int)height);
@@ -355,6 +402,10 @@ unsafe class Program
       else if(StringCompare("ls", command))
       {
         Ls();
+      }
+      else if (StringCompare("lsgui", command))
+      {
+        LsGUI();
       }
       else
       {

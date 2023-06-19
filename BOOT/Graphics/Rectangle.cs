@@ -5,7 +5,7 @@ namespace BOOT.Graphics
     [StructLayout(LayoutKind.Sequential)]
     public unsafe struct Rectangle
     {
-        public Point point;
-        public Size size;
+        public Point Point;
+        public Size Size;
     }
 }

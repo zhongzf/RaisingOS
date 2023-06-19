@@ -5,7 +5,7 @@ namespace BOOT.Graphics
     [StructLayout(LayoutKind.Sequential)]
     public unsafe struct Point
     {
-        public uint x;
-        public uint y;
+        public uint X;
+        public uint Y;
     }
 }
